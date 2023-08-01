@@ -1,11 +1,12 @@
 ﻿using OpenQA.Selenium;
-using System;
+using SimpleBrowser.WebDriver;
 using System.Security.Principal;
 
 namespace Mantis_tests
 {
     public class LoginHelper : HelperBase
     {
+
         public LoginHelper(ApplicationManager manager)
         : base(manager)
         {

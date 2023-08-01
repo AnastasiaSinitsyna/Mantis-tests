@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using NUnit.Framework;
 using System.IO;
+using System.Security.Principal;
 
 namespace Mantis_tests
 {
@@ -14,36 +15,38 @@ namespace Mantis_tests
         [Test]
         public void TestRemoveProject()
         {
-            int number = 8; //порядковый номер проекта
+            int number = 5; //порядковый номер проекта
 
-            List<ProjectData> oldProjectsList = app.Project.GetProjectsList();
-
-            if (oldProjectsList.Count < number)
+            List<ProjectData> projectsOld = app.API.CreateProjectList(new AccountData("administrator", "root"));
+            
+            if (projectsOld.Count < number)
             {
                 do
                 {
-                    app.Project.CreateSomeProject();
-                    oldProjectsList = app.Project.GetProjectsList();
+                    app.API.CreateSomeProject(new AccountData("administrator", "root"), "Удачная сделка");
+                    projectsOld = app.API.CreateProjectList(new AccountData("administrator", "root"));
                 }
-                while (oldProjectsList.Count < number);
+                while (projectsOld.Count < number);
             }
-            ProjectData toBeRemoved = oldProjectsList[number - 1];
+            ProjectData toBeRemoved = projectsOld[number - 1];
 
-            app.Navigator.ToProjectPage(number);
+            app.Navigator.ToProjectsPage()
+            .ToProjectPage(number);
             app.Project.ClickToRemoveProject();
             app.Project.SubmitRemoveProject();
             
-            List<ProjectData> newProjectsList = app.Project.GetProjectsList();
+            List<ProjectData> projectsNew = app.API.CreateProjectList(new AccountData("administrator", "root"));
 
             //Проверка количества проектов
-            Assert.AreEqual(oldProjectsList.Count - 1, newProjectsList.Count);
+            Assert.AreEqual(projectsOld.Count - 1, projectsNew.Count);
 
-            oldProjectsList.Sort((left, right) => left.Name.CompareTo(right.Name));
-            newProjectsList.Sort((left, right) => left.Name.CompareTo(right.Name));
-            oldProjectsList.RemoveAt(number - 1);
+            projectsOld.Sort((left, right) => left.Name.CompareTo(right.Name));
+            projectsNew.Sort((left, right) => left.Name.CompareTo(right.Name));
+            projectsOld.RemoveAt(number - 1);
 
             //Проверка списков проектов
-            Assert.AreEqual(oldProjectsList, newProjectsList);
+            Assert.AreEqual(projectsOld, projectsNew);
+
         }
     }
 }

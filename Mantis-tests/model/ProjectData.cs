@@ -5,6 +5,7 @@ using System.Security.Policy;
 using System.Text;
 using System.Threading.Tasks;
 using System.Text.RegularExpressions;
+using System.Xml.Linq;
 
 namespace Mantis_tests
 {
@@ -20,22 +21,23 @@ namespace Mantis_tests
             {
                 return true;
             }
-            return Name == other.Name 
-                && Description == other.Description;
+            return Name == other.Name;
         }
+
         public override int GetHashCode()
         {
             return Name.GetHashCode() ^ Description.GetHashCode();
         }
         public override string ToString()
         {
-            return "name=" + Name + "\ndescription=" + Description;
+            return "name=" + Name;
         }
         public ProjectData()
         {
         }
         public string Name { get; set; }
         public string Description { get; set; }
+        public string Id { get; set; }
         public ProjectData(string name, string description)
         {
             Name = name;

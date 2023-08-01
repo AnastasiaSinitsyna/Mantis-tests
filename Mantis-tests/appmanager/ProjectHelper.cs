@@ -18,7 +18,6 @@ namespace Mantis_tests
         public ProjectHelper FillProjectInformation(ProjectData newProject)
         {
             Type(By.Id("project-name"), newProject.Name);
-            Type(By.Id("project-description"), newProject.Description);
             return this;
 
         }
@@ -75,5 +74,7 @@ namespace Mantis_tests
             FillProjectInformation(project);
             Submit();
         }
+
+
     }
 }

@@ -19,6 +19,7 @@ namespace Mantis_tests
         protected NavigationHelper navigator;
         protected ProjectHelper projectHelper;
 
+        public APIHelper API { get; private set; }
         public RegistrationHelper Registration { get; private set; }
         public FtpHelper Ftp { get; private set; }
 
@@ -33,6 +34,7 @@ namespace Mantis_tests
             navigator = new NavigationHelper(this, baseURL);
             loginHelper = new LoginHelper(this);
             projectHelper = new ProjectHelper(this);
+            API = new APIHelper(this);
         }   
 
         public static ApplicationManager GetInstance()
@@ -40,7 +42,7 @@ namespace Mantis_tests
             if (!app.IsValueCreated)
             {
                 ApplicationManager newInstance = new ApplicationManager();
-                newInstance.driver.Url = "http://localhost/mantisbt-2.25.7/login_page.php";
+                newInstance.driver.Url = newInstance.baseURL + "login_page.php";
                 app.Value = newInstance;
             }
             return app.Value;

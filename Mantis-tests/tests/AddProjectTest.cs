@@ -14,22 +14,22 @@ namespace Mantis_tests
        public void TestAddProject()
         {
             ProjectData newProject = new ProjectData();
-            newProject.Name = "Третий проект";
-            newProject.Description = "Описание третьего проекта";
+            newProject.Name = "Новый проект";
 
-            List<ProjectData> oldProjectsList = app.Project.GetProjectsList();
-            
+            List<ProjectData> oldProjectsList = app.API.CreateProjectList(new AccountData("administrator", "root"));
+
             //Проверка дублирующихся имен
-            if(oldProjectsList.Any(p => p.Name == newProject.Name))
+            if (oldProjectsList.Any(p => p.Name == newProject.Name))
             {
                 newProject.Name = GenerateRandomString(10);
             }
-            
-            app.Navigator.ToAddProjectPage();
+
+            app.Navigator.ToProjectsPage()
+            .ToAddProjectPage();
             app.Project.FillProjectInformation(newProject);
             app.Project.Submit();
 
-            List<ProjectData> newProjectsList = app.Project.GetProjectsList();
+            List<ProjectData> newProjectsList = app.API.CreateProjectList(new AccountData("administrator", "root"));
 
             //Проверка количества проектов
             Assert.AreEqual(oldProjectsList.Count +1, newProjectsList.Count);
